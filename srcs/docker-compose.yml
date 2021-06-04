@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+
+  nginx:
+    build: ./nginx
+    image: nginx
+    container_name: nginx
+    depend_on:
+      - db
+      - wordpress
+    volumes:
+      - ${BASE}/wordpress/data:/nginx/data/path
+    ports:
+      - "443":"443"
+      - "9000"
+    restart: always
+
+  db:
+    build: ./mariadb
+    image: mariadb
+    container_name: mariadb
+    volumes:
+      - ${BASE}/mariadb/data:/var/lib/mysql
+    ports:
+      - "3306"
+    env_file:
+      - .env
+    restart: always
+
+  wordpress:
+    build: ./wordpress
+    image: wordpress
+    container_name: wordpress
+    volumes:
+      - ${BASE}/wordpress/data:/wordpress/data/path
+    ports:
+      - "3306"
+      - "9000"
+    restart: always
