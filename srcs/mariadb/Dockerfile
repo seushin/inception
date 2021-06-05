@@ -1,14 +1,12 @@
 FROM alpine:3.11
 
 RUN apk update && \
-	apk add --no-cache openrc mariadb mariadb-client wget vim
-
-ENV MYSQL_DATA_DIR=/var/lib/mysql
+	apk add --no-cache mariadb mariadb-client
 
 RUN mkdir -p /run/mysqld && \
-	chown -R mysql:mysql /run/mysqld ${MYSQL_DATA_DIR}
+	chown -R mysql:mysql /run/mysqld /var/lib/mysql
 
-RUN mysql_install_db --user=mysql --datadir=${MYSQL_DATA_DIR}
+RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
 COPY ./tools/docker-entrypoint.sh .
 COPY ./conf/my.cnf /etc/

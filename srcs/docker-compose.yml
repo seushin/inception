@@ -2,38 +2,51 @@ version: "3.9"
 services:
 
   nginx:
+    depends_on:
+      - mariadb
+      - wordpress
     build: ./nginx
     image: nginx
-    container_name: nginx
-    depend_on:
-      - db
-      - wordpress
     volumes:
-      - ${BASE}/wordpress/data:/nginx/data/path
+      - wp-data:/var/www/wordpress/
     ports:
-      - "443":"443"
-      - "9000"
+      - "443:443"
+    networks:
+      - backend
     restart: always
 
-  db:
+  mariadb:
     build: ./mariadb
     image: mariadb
-    container_name: mariadb
     volumes:
-      - ${BASE}/mariadb/data:/var/lib/mysql
+      - db-data:/var/lib/mysql
     ports:
       - "3306"
+    networks:
+      - backend
     env_file:
       - .env
     restart: always
 
   wordpress:
+    depends_on:
+      - mariadb
     build: ./wordpress
     image: wordpress
-    container_name: wordpress
     volumes:
-      - ${BASE}/wordpress/data:/wordpress/data/path
+      - wp-data:/var/www/wordpress/
     ports:
-      - "3306"
       - "9000"
+    networks:
+      - backend
+    env_file:
+      - .env
     restart: always
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  db-data:
+  wp-data:
