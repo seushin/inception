@@ -1,12 +1,24 @@
 include srcs/.env
 
-up:
-	cd srcs && docker-compose up --build -d
+D_DATA = srcs/data
+VOLUMES = $(shell docker volume ls -q)
+
+up: $(D_DATA)
+	cd srcs && docker-compose up -d --build
 
 down:
 	cd srcs && docker-compose down
 
+ifneq ($(VOLUMES),)
 clean: down
-	docker volume rm ${COMPOSE_PROJECT_NAME}_db-data ${COMPOSE_PROJECT_NAME}_wp-data
+	docker volume rm $(VOLUMES)
+	rm -rf $(D_DATA)
+else
+clean: down
+	rm -rf $(D_DATA)
+endif
+
+$(D_DATA):
+	mkdir -p $(D_DATA)/db-data $(D_DATA)/wp-data
 
 re: down clean up

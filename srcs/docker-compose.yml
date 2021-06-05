@@ -49,4 +49,14 @@ networks:
 
 volumes:
   db-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: "$DATA_DIR/db-data"
+      o: bind
   wp-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: "$DATA_DIR/wp-data"
+      o: bind
