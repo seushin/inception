@@ -10,7 +10,7 @@ RUN wget https://wordpress.org/latest.tar.gz && \
 	mv wordpress/* /var/www/wordpress/ && \
 	rm -rf latest.tar.gz wordpress
 
-COPY ./conf/wp-config.php /var/www/wordpress/
+COPY ./conf/wp-config.php /tmp/
 COPY ./conf/www.conf /etc/php7/php-fpm.d/
 COPY ./tools/docker-entrypoint.sh .
 

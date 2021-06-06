@@ -9,12 +9,11 @@ up: $(D_DATA)
 down:
 	cd srcs && docker-compose down
 
-ifneq ($(VOLUMES),)
 clean: down
-	docker volume rm $(VOLUMES)
+ifeq ($(VOLUMES),)
 	rm -rf $(D_DATA)
 else
-clean: down
+	docker volume rm $(VOLUMES)
 	rm -rf $(D_DATA)
 endif
 
