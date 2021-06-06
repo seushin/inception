@@ -1,22 +1,24 @@
 include srcs/.env
 
-VOLUMES = $(shell docker volume ls -q)
+COMPOSE_FILE	= ./srcs/docker-compose.yml
+VOLUMES			= $(shell docker volume ls -q)
 
 up: $(DATA_DIR)
-	cd srcs && docker-compose up -d --build
+	docker-compose -f $(COMPOSE_FILE) up --build -d
 
 down:
-	cd srcs && docker-compose down
+	docker-compose -f $(COMPOSE_FILE) down
+
+nginx wordpress mariadb:
+	docker-compose -f $(COMPOSE_FILE) exec $@ /bin/sh
 
 clean: down
-ifeq ($(VOLUMES),)
 	rm -rf $(DATA_DIR)
-else
+ifneq ($(VOLUMES),)
 	docker volume rm $(VOLUMES)
-	rm -rf $(DATA_DIR)
 endif
 
 $(DATA_DIR):
 	mkdir -p $(DATA_DIR)/db-data $(DATA_DIR)/wp-data
 
-re: down clean up
+re: down up
