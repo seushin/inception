@@ -1,9 +1,8 @@
 include srcs/.env
 
-D_DATA = srcs/data
 VOLUMES = $(shell docker volume ls -q)
 
-up: $(D_DATA)
+up: $(DATA_DIR)
 	cd srcs && docker-compose up -d --build
 
 down:
@@ -11,13 +10,13 @@ down:
 
 clean: down
 ifeq ($(VOLUMES),)
-	rm -rf $(D_DATA)
+	rm -rf $(DATA_DIR)
 else
 	docker volume rm $(VOLUMES)
-	rm -rf $(D_DATA)
+	rm -rf $(DATA_DIR)
 endif
 
-$(D_DATA):
-	mkdir -p $(D_DATA)/db-data $(D_DATA)/wp-data
+$(DATA_DIR):
+	mkdir -p $(DATA_DIR)/db-data $(DATA_DIR)/wp-data
 
 re: down clean up
