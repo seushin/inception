@@ -16,6 +16,7 @@ RUN wget https://wordpress.org/latest.tar.gz && \
 RUN chown -R www-data:www-data /var/www/
 
 COPY ./conf/wp-config.php /tmp/
+COPY ./conf/php.ini /etc/php7/
 COPY ./conf/www.conf /etc/php7/php-fpm.d/
 COPY ./tools/docker-entrypoint.sh /usr/local/bin/
 
