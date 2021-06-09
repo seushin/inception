@@ -7,9 +7,9 @@ RUN mkdir -p /run/nginx/ && \
 	mkdir -p /var/www/wordpress/
 
 COPY ./conf/default.conf /tmp/
-COPY ./tools/docker-entrypoint.sh .
+COPY ./tools/docker-entrypoint.sh /usr/local/bin/
 
 EXPOSE 443
 
-ENTRYPOINT ["./docker-entrypoint.sh"]
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
