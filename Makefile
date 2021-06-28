@@ -24,9 +24,10 @@ ifneq ($(VOLUMES),)
 endif
 
 install_docker:
-ifeq ($(shell command docker -v),)
+ifeq ($(shell which docker),)
 	sudo ./srcs/tools/install_docker.sh
 endif
+	sudo chmod 666 /var/run/docker.sock
 
 set_host:
 ifeq ($(shell cat /etc/hosts | grep seushin.42.fr),)
