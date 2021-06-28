@@ -8,7 +8,7 @@ VOLUMES			= $(shell docker volume ls -q)
 
 all: up
 
-up: set_host $(DATA_DIR)
+up: install_docker set_host $(DATA_DIR)
 	docker-compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE) up --build -d
 
 down:
@@ -21,6 +21,11 @@ clean: down
 	sudo rm -rf $(DATA_DIR)
 ifneq ($(VOLUMES),)
 	docker volume rm $(VOLUMES)
+endif
+
+install_docker:
+ifeq ($(shell command docker -v),)
+	sudo ./srcs/tools/install_docker.sh
 endif
 
 set_host:
