@@ -18,7 +18,7 @@ nginx wordpress mariadb:
 	docker-compose -f $(COMPOSE_FILE) exec $@ /bin/sh
 
 clean: down
-	rm -rf $(DATA_DIR)
+	sudo rm -rf $(DATA_DIR)
 ifneq ($(VOLUMES),)
 	docker volume rm $(VOLUMES)
 endif
