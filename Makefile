@@ -24,11 +24,11 @@ endif
 
 set_host:
 ifeq ($(shell cat /etc/hosts | grep seushin.42.fr),)
-	echo "127.0.0.1    seushin.42.fr" >> /etc/hosts
+	sudo ./srcs/tools/set_host.sh
 endif
 
 $(DATA_DIR):
-	mkdir -p $(DATA_DIR)/db-data 
+	mkdir -p $(DATA_DIR)/db-data
 	mkdir -p $(DATA_DIR)/wp-data
 
 re: clean up
