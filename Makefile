@@ -1,6 +1,7 @@
 include srcs/.env
 
 COMPOSE_FILE	= ./srcs/docker-compose.yml
+ENV_FILE		= ./srcs/.env
 VOLUMES			= $(shell docker volume ls -q)
 
 .PHONY: all up down nginx wordpress mariadb clean re
@@ -8,10 +9,10 @@ VOLUMES			= $(shell docker volume ls -q)
 all: up
 
 up: set_host $(DATA_DIR)
-	docker-compose -f $(COMPOSE_FILE) up --build -d
+	docker-compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE) up --build -d
 
 down:
-	docker-compose -f $(COMPOSE_FILE) down
+	docker-compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE) down
 
 nginx wordpress mariadb:
 	docker-compose -f $(COMPOSE_FILE) exec $@ /bin/sh
