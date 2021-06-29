@@ -23,6 +23,13 @@ ifneq ($(VOLUMES),)
 	docker volume rm $(VOLUMES)
 endif
 
+fclean:
+	docker stop $(shell docker ps -qa) 2> /dev/null; \
+	docker rm $(shell docker ps -qa) 2> /dev/null; \
+	docker rmi -f $(shell docker images -qa) 2> /dev/null; \
+	docker volume rm $(shell docker volume ls -q) 2> /dev/null; \
+	docker network rm $(shell docker network ls -q) 2> /dev/null
+
 install_docker:
 ifeq ($(shell which docker),)
 	sudo ./srcs/tools/install_docker.sh
