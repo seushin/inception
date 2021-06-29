@@ -9,6 +9,9 @@ VOLUMES			= $(shell docker volume ls -q)
 all: up
 
 up: install_docker set_host $(DATA_DIR)
+	docker-compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE) up --build
+
+d: install_docker set_host $(DATA_DIR)
 	docker-compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE) up --build -d
 
 down:
