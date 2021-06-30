@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/sh
 
 echo "** installing docker"
 apt-get update && \
