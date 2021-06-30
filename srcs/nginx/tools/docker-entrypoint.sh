@@ -17,4 +17,5 @@ if [ -e /tmp/default.conf ]; then
 	rm -f /tmp/default.conf
 fi
 
+echo "** run $@"
 exec "$@"

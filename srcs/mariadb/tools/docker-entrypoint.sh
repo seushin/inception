@@ -22,4 +22,5 @@ if [ ! -e /tmp/init ]; then
 	echo "FLUSH PRIVILEGES;" >> /tmp/init
 fi
 
+echo "** run $@"
 exec "$@"
