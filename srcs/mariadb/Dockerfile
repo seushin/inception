@@ -14,4 +14,4 @@ COPY ./conf/my.cnf /etc/
 EXPOSE 3306
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["/usr/bin/mysqld", "--user=mysql", "--skip-name-resolve", "--init-file=/tmp/init", "--debug-gdb"]
+CMD ["/usr/bin/mysqld", "--user=mysql", "--init-file=/tmp/init"]
