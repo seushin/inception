@@ -5,6 +5,7 @@ services:
     depends_on:
       - mariadb
       - wordpress
+      - adminer
     build: ./nginx
     image: nginx
     volumes:
@@ -43,6 +44,17 @@ services:
       - backend
     env_file:
       - .env
+    restart: always
+
+  adminer:
+    depends_on:
+      - mariadb
+    build: ./bonus/adminer
+    image: adminer
+    ports:
+      - "8080"
+    networks:
+      - backend
     restart: always
 
 networks:
