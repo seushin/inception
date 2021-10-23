@@ -2,6 +2,7 @@ include srcs/.env
 
 COMPOSE_FILE	= ./srcs/docker-compose.yml
 ENV_FILE		= ./srcs/.env
+COMPOSE_FLAGS	= -f $(COMPOSE_FILE) --env-file $(ENV_FILE)
 VOLUMES			= $(shell docker volume ls -q)
 
 GREEN	= \033[32m
@@ -14,16 +15,16 @@ LF		= \033[1A\033[K
 all: up
 
 up: setup $(DATA_DIR)
-	docker-compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE) up --build
+	docker-compose $(COMPOSE_FLAGS) up --build
 
 upd: setup $(DATA_DIR)
-	docker-compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE) up --build -d
+	docker-compose $(COMPOSE_FLAGS) up --build -d
 
 down:
-	docker-compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE) down
+	docker-compose $(COMPOSE_FLAGS) down
 
 nginx wordpress mariadb:
-	docker-compose -f $(COMPOSE_FILE) exec $@ /bin/sh
+	docker-compose $(COMPOSE_FLAGS) exec $@ /bin/sh
 
 clean: down
 	sudo rm -rf $(DATA_DIR)
@@ -47,18 +48,13 @@ ls:
 	@echo "\n$(GREEN)** docker network ls$(RESET)"
 	@docker network ls
 
-setup: install_docker set_host
+setup: install_docker add_host
 
 install_docker:
-ifeq ($(shell which docker),)
 	sudo ./srcs/tools/install_docker.sh
-endif
-	sudo chmod 666 /var/run/docker.sock
 
-set_host:
-ifeq ($(shell cat /etc/hosts | grep seushin.42.fr),)
-	sudo ./srcs/tools/set_host.sh
-endif
+add_host:
+	DOMAIN_NAME=$(DOMAIN_NAME) sudo ./srcs/tools/add_host.sh
 
 $(DATA_DIR):
 	mkdir -p $(DATA_DIR)/db-data
